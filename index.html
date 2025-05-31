@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aviator</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: white;
+      text-align: center;
+    }
+    h1 {
+      color: #ff4c4c;
+      font-size: 2.5rem;
+      margin-top: 20px;
+    }
+    .subtitle {
+      font-size: 1rem;
+      color: #cccccc;
+      margin-bottom: 30px;
+    }
+    #game-area {
+      border: 2px solid #444;
+      width: 90%;
+      max-width: 400px;
+      margin: 0 auto;
+      height: 200px;
+      position: relative;
+      background-color: #111;
+      border-radius: 10px;
+    }
+    #multiplier {
+      font-size: 2rem;
+      color: #00ff00;
+      padding-top: 20px;
+    }
+    .plane {
+      width: 50px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      transition: transform 5s linear;
+    }
+    .bet-section {
+      margin-top: 20px;
+    }
+    input[type="number"] {
+      padding: 10px;
+      font-size: 1rem;
+      width: 150px;
+    }
+    button {
+      padding: 10px 15px;
+      font-size: 1rem;
+      margin: 5px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+    }
+    .start-btn {
+      background-color: #007bff;
+      color: white;
+    }
+    .cashout-btn {
+      background-color: #555;
+      color: white;
+    }
+    .balance {
+      margin-top: 10px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <h1>Aviator</h1>
+  <div class="subtitle">Multiplay Point History</div>
+  <div id="game-area">
+    <div id="multiplier">1.00x</div>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Airplane_3D_icon.png" class="plane" id="plane" />
+  </div>
+  <div class="bet-section">
+    <input type="number" id="betInput" placeholder="Enter your bet" min="1" />
+    <button class="start-btn" onclick="startGame()">Start Bet</button>
+    <button class="cashout-btn" onclick="cashOut()">Cash Out</button>
+    <div class="balance">Balance: <span id="balance">1.00</span> BDT</div>
+  </div>
+  <audio id="bg-sound" autoplay loop>
+    <source src="https://www.fesliyanstudios.com/play-mp3/387" type="audio/mpeg">
+  </audio>
+
+  <script>
+    let multiplier = 1.00;
+    let interval;
+    let cashOutValue = 0;
+    let balance = 1.00;
+
+    function startGame() {
+      multiplier = 1.00;
+      document.getElementById("multiplier").innerText = multiplier.toFixed(2) + "x";
+      movePlane();
+      interval = setInterval(() => {
+        multiplier += 0.05;
+        document.getElementById("multiplier").innerText = multiplier.toFixed(2) + "x";
+      }, 100);
+    }
+
+    function cashOut() {
+      clearInterval(interval);
+      cashOutValue = multiplier;
+      const bet = parseFloat(document.getElementById("betInput").value);
+      if (!isNaN(bet) && bet > 0) {
+        balance += bet * cashOutValue - bet;
+        document.getElementById("balance").innerText = balance.toFixed(2);
+        alert("Cashed out at: " + cashOutValue.toFixed(2) + "x\nNew balance: " + balance.toFixed(2) + " BDT");
+      }
+    }
+
+    function movePlane() {
+      const plane = document.getElementById("plane");
+      plane.style.transform = "translate(300px, -150px) rotate(15deg)";
+    }
+  </script>
+</body>
+</html>
